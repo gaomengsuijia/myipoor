@@ -15,3 +15,13 @@ MINCOUNT = 500
 
 #ip池允许的最大数量ip
 MAXCOUNT = 1000
+#测试百度的超时时间
+TESTTIMEOUT = 2
+#定时日程
+CRON = {
+    'minute':'36',
+    'hour':'11',
+    'day':'*',
+    'month':'*',
+    'week':'*'
+}

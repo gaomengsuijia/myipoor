@@ -27,13 +27,12 @@ class Manageip(object):
             return True
         return False
 
-    def test(self,poxy_ip):
+    def test(self,poxy_ip,page):
         """
         检查ip可用
         :param poxy_ip:
         :return:
         """
-        page = Parsepage()
         url = "http://www.baidu.com"
         flag = page.parse_baidu(url,poxy_ip)
         if flag == True:  # 可以用就保存到redis中
@@ -65,15 +64,15 @@ class Manageip(object):
         #拿到ips
         poxy_ips = p.get_poxy_ip(backfun)
         #开始检测每一个是否可用
-
+        page = Parsepage()
         for each_ip in poxy_ips:
-            self.test(each_ip)
+            self.test(each_ip,page)
 
 
 
 class Doctorip(object):
 
-    def is_valid(self,poxy_ip):
+    def is_valid(self):
         """
         检查ip是否可用,通过访问百度首页
         url = http://www.baidu.com
@@ -88,9 +87,10 @@ class Doctorip(object):
 
         poxy_ips = red.get(int(0.5*count))
         manaip = Manageip()
+        page = Parsepage()
         #循环每个ip进行检查
         for each_ip in poxy_ips:
-            manaip.test(each_ip)
+            manaip.test(each_ip,page)
 
 
     def check_ip(self):

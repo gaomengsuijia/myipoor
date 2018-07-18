@@ -3,6 +3,7 @@ __author__ = "hulinjun"
 import requests
 from bs4 import BeautifulSoup
 from requests.exceptions import ConnectionError,RequestException
+from settings import TESTTIMEOUT
 class Parsepage(object):
     """
     解析网页
@@ -23,7 +24,7 @@ class Parsepage(object):
 
     def parse_baidu(self,url,poxy_ip):
         """
-        检查百度
+        检查百度，判断是否可用
         :param url:
         :return:
         """
@@ -32,18 +33,19 @@ class Parsepage(object):
         real_proxy = 'http://' + poxy_ip
         proxies = {
             "http": real_proxy,
-            "https": real_proxy,
+            # "https": real_proxy,
         }
         try:
-            req = requests.get(url=url,headers=self.headers,proxies=proxies)
             print("开始检测ip : {}".format(poxy_ip))
+            req = requests.get(url=url,headers=self.headers,proxies=proxies,timeout=TESTTIMEOUT)
             if req.status_code == 200:
                 print("可用")
                 return True
             print("不可用")
             return False
         except RequestException:
-            raise Exception("连接百度检测错误")
+            return False
+            # raise Exception("连接百度检测错误")
 
 
 
