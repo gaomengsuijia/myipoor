@@ -53,6 +53,13 @@ class Manaredis(object):
         """
         return self.redisclient.llen("poxy_ip")
 
+    def flusth(self):
+        """
+        刷新
+        :return:
+        """
+        self.redisclient.flushall()
+
 
 
 if __name__ == '__main__':

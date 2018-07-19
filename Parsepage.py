@@ -44,6 +44,7 @@ class Parsepage(object):
             print("不可用")
             return False
         except RequestException:
+            print("不可用")
             return False
             # raise Exception("连接百度检测错误")
 

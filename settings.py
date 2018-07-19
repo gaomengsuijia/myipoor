@@ -7,6 +7,7 @@ REDIS = {
     "port":6379,
 }
 
+
 #爬虫延迟时间
 DEYTIME = 5
 

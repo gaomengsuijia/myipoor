@@ -34,6 +34,8 @@ class Poxy(object,metaclass=Poxy_metaclass):
         for each in eval("self.{}()".format(backfun)):
             poxy_ips.append(each)
 
+        print(len(poxy_ips))
+
         return poxy_ips
 
 
@@ -44,7 +46,7 @@ class Poxy(object,metaclass=Poxy_metaclass):
         url = http://www.66ip.cn/index.html
         :return:
         """
-        for page in range(1,2):
+        for page in range(1,50):
             url = "http://www.66ip.cn/{}.html".format(page)
             soup = Parsepage().get_page(url)
             trs = soup.select('#main tr')

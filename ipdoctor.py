@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 __author__ = "hulinjun"
-import requests
+
+#一定要用gevent最先引入，再引入其他的模块啊，一定要记住啊啊啊啊啊
+import gevent
+from gevent import monkey
+monkey.patch_all()#把当前的io操作做上标记，当程序遇到io操作时就会自动切换，实现大并发
 import time
 from manaredis import Manaredis
 from Parsepage import Parsepage
 from settings import MAXCOUNT,MINCOUNT
 from Poxy import Poxy
 import threading
-
 
 class Manageip(object):
     """
@@ -65,8 +68,12 @@ class Manageip(object):
         poxy_ips = p.get_poxy_ip(backfun)
         #开始检测每一个是否可用
         page = Parsepage()
-        for each_ip in poxy_ips:
-            self.test(each_ip,page)
+        # for each_ip in poxy_ips:
+        #     self.test(each_ip,page)
+
+        gevents = [gevent.spawn(self.test, each_ip, page) for each_ip in poxy_ips]
+        gevent.joinall(gevents)
+        print("检查结束")
 
 
 
@@ -81,6 +88,7 @@ class Doctorip(object):
         """
         red = Manaredis()
         count = red.count()
+        print(count)
         if count==0:
             print("等待添加ip")
             time.sleep(5)
@@ -89,8 +97,14 @@ class Doctorip(object):
         manaip = Manageip()
         page = Parsepage()
         #循环每个ip进行检查
-        for each_ip in poxy_ips:
-            manaip.test(each_ip,page)
+        # for each_ip in poxy_ips:
+        #     manaip.test(each_ip,page)
+
+
+        print("开始检查")
+        gevents = [gevent.spawn(manaip.test,each_ip,page) for each_ip in poxy_ips]
+        gevent.joinall(gevents)
+        print("检查结束")
 
 
     def check_ip(self):
